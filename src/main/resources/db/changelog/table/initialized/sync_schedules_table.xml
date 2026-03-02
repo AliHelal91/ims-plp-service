@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    
+
+    <!-- 1 Enable UUID extension -->
+    <changeSet id="001-enable-uuid-extension" author="Ali Hilal" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <!-- 2 Create sync_schedules table -->
+    <changeSet id="002-create-sync-schedules-table" author="Ali Hilal">
+        <createTable tableName="sync_schedules" schemaName="ims_plp_service_db">
+
+            <column name="id" type="UUID" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="sync_batch_id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="scheduled_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="executed_at" type="TIMESTAMP"/>
+            <column name="completed_at" type="TIMESTAMP"/>
+
+            <column name="total_count" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="success_count" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="failed_count" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_by" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <!-- 3 Add indexes -->
+    <changeSet id="003-add-sync-schedules-indexes" author="Ali Hilal">
+
+        <!-- Index for batch lookup -->
+        <createIndex indexName="idx_sync_schedules_batch" tableName="sync_schedules" schemaName="ims_plp_service_db">
+            <column name="sync_batch_id"/>
+        </createIndex>
+
+        <!-- Index for status lookup -->
+        <createIndex indexName="idx_sync_schedules_status" tableName="sync_schedules" schemaName="ims_plp_service_db">
+            <column name="status"/>
+        </createIndex>
+
+        <!-- Index for scheduling -->
+        <createIndex indexName="idx_sync_schedules_scheduled" tableName="sync_schedules" schemaName="ims_plp_service_db">
+            <column name="scheduled_at"/>
+        </createIndex>
+
+        <!-- Optional index for created_by filter -->
+        <createIndex indexName="idx_sync_schedules_created_by" tableName="sync_schedules" schemaName="ims_plp_service_db">
+            <column name="created_by"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

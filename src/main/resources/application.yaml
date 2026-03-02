@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ims-plp-services
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test2
+    username: postgres
+    password: 123456
+
+    jpa:
+      properties:
+        hibernate:
+          default_schema: ims_plp_service_db
+
+    #  jpa:
+    #    hibernate:
+    #      ddl-auto: create-drop
+    #    open-in-view: false
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.xml
+    default-schema: ims_plp_service_db
+kafka:
+  bootstrap-servers: localhost:9092
+  topic:
+    product-updates: product-topic

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    
+
+    <!-- 1 Enable UUID extension -->
+    <changeSet id="002-enable-uuid-extension" author="Ali Hilal" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+        </sql>
+    </changeSet>
+
+    <!-- 2 Create products table -->
+    <changeSet id="003-create-products-table" author="Ali Hilal">
+        <createTable tableName="products" schemaName="ims_plp_service_db">
+
+            <column name="id" type="UUID" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="item_code" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="name_en" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name_ar" type="VARCHAR(255)"/>
+
+            <column name="country_code" type="VARCHAR(255)"/>
+            <column name="product_type" type="VARCHAR(255)"/>
+
+            <column name="description_en" type="TEXT"/>
+            <column name="description_ar" type="TEXT"/>
+            <column name="product_category" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_sub_category" type="VARCHAR(100)"/>
+            <column name="manufacturer" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="attributes" type="JSONB"/>
+            <column name="sales_channels" type="JSONB">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="sync_status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_version" type="INTEGER" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="synced_version" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_synced_at" type="TIMESTAMP"/>
+            <column name="last_sync_attempt_at" type="TIMESTAMP"/>
+
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Boolean flags -->
+            <column name="is_preorder" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_serialized" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="return_allowed" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="free_shipping_enabled" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inventory_check" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="allow_non_stc" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Dates -->
+            <column name="publish_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="available_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discontinued_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preorder_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <!-- 3 Add indexes -->
+    <changeSet id="004-add-products-indexes" author="Ali Hilal">
+
+        <!-- Composite index for sync processing -->
+        <createIndex indexName="idx_products_sync_processing"
+                     tableName="products"
+                     schemaName="ims_plp_service_db">
+            <column name="sync_status"/>
+            <column name="synced_version"/>
+            <column name="product_version"/>
+        </createIndex>
+
+        <!-- Product category index -->
+        <createIndex indexName="idx_products_category"
+                     tableName="products"
+                     schemaName="ims_plp_service_db">
+            <column name="product_category"/>
+        </createIndex>
+
+        <!-- Last sync attempt index -->
+        <createIndex indexName="idx_products_last_sync_attempt"
+                     tableName="products"
+                     schemaName="ims_plp_service_db">
+            <column name="last_sync_attempt_at"/>
+        </createIndex>
+
+        <!-- JSONB GIN index for attributes -->
+        <sql>
+            CREATE INDEX IF NOT EXISTS idx_products_attributes_gin
+            ON ims_plp_service_db.products
+            USING GIN (attributes);
+        </sql>
+
+        <!-- JSONB GIN index for sales_channels -->
+        <sql>
+            CREATE INDEX IF NOT EXISTS idx_products_sales_channels_gin
+            ON ims_plp_service_db.products
+            USING GIN (sales_channels);
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>

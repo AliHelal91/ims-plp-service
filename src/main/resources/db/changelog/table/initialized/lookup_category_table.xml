@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    
+
+    <!-- 1 Create Sequence -->
+    <changeSet id="lookup-category-001-create-sequence" author="Ali Hilal">
+        <createSequence
+                schemaName="ims_plp_service_db"
+                sequenceName="lookup_category_seq"
+                startValue="1"
+                incrementBy="1"/>
+    </changeSet>
+
+    <!-- 2 Create Table -->
+    <changeSet id="lookup-category-002-create-table" author="Ali Hilal">
+        <createTable tableName="lookup_category" schemaName="ims_plp_service_db">
+
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             primaryKeyName="pk_lookup_category"/>
+            </column>
+
+            <column name="code" type="VARCHAR(100)">
+                <constraints nullable="false"
+                             unique="true"
+                             uniqueConstraintName="uk_lookup_category_code"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <!-- 3 Indexes -->
+    <changeSet id="lookup-category-003-create-indexes" author="Ali Hilal">
+
+        <!-- Even though code is unique, explicit index improves readability -->
+        <createIndex indexName="idx_lookup_category_code"
+                     schemaName="ims_plp_service_db"
+                     tableName="lookup_category">
+            <column name="code"/>
+        </createIndex>
+
+        <createIndex indexName="idx_lookup_category_is_active"
+                     schemaName="ims_plp_service_db"
+                     tableName="lookup_category">
+            <column name="is_active"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

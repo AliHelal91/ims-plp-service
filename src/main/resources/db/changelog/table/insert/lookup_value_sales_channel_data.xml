@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+
+    <!--    Insert Values for the Sales Channel -->
+    <changeSet id="20260212_insert_lookup_value_2" author="Ali Hilal">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="agentPortal"/>
+            <column name="display_en" value="Agent Portal"/>
+            <column name="display_ar" value="AgentPortal"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="callCenter"/>
+            <column name="display_en" value="call Center"/>
+            <column name="display_ar" value="call Center"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="caseManagement"/>
+            <column name="display_en" value="Case Management"/>
+            <column name="display_ar" value="Case Management"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="cms"/>
+            <column name="display_en" value="cms"/>
+            <column name="display_ar" value="cms"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="Cws"/>
+            <column name="display_en" value="Cws"/>
+            <column name="display_ar" value="Cws"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="eDealer"/>
+            <column name="display_en" value="eDealer"/>
+            <column name="display_ar" value="eDealer"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="fms"/>
+            <column name="display_en" value="fms"/>
+            <column name="display_ar" value="fms"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="IVR"/>
+            <column name="display_en" value="IVR"/>
+            <column name="display_ar" value="IVR"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="ussd"/>
+            <column name="display_en" value="ussd"/>
+            <column name="display_ar" value="ussd"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="kiosk"/>
+            <column name="display_en" value="kiosk"/>
+            <column name="display_ar" value="kiosk"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="myStc"/>
+            <column name="display_en" value="myStc"/>
+            <column name="display_ar" value="myStc"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="myStcAndroid"/>
+            <column name="display_en" value="myStc Android"/>
+            <column name="display_ar" value="myStc Android"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="wearables"/>
+            <column name="display_en" value="wearables"/>
+            <column name="display_ar" value="wearables"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="myStcIphone"/>
+            <column name="display_en" value="myStc Iphone"/>
+            <column name="display_ar" value="myStc Iphone"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="myStcMobile"/>
+            <column name="display_en" value="myStc Mobile"/>
+            <column name="display_ar" value="myStc Mobile"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="myStcPortal"/>
+            <column name="display_en" value="myStc Portal"/>
+            <column name="display_ar" value="myStc Portal"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="sms"/>
+            <column name="display_en" value="sms"/>
+            <column name="display_ar" value="sms"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="tamayouz"/>
+            <column name="display_en" value="tamayouz"/>
+            <column name="display_ar" value="tamayouz"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="tawasolApp"/>
+            <column name="display_en" value="tawasolApp"/>
+            <column name="display_ar" value="tawasolApp"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+        <insert tableName="lookup_value" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_value_seq"/>
+            <column name="value" value="telesalesApp"/>
+            <column name="display_en" value="telesalesApp"/>
+            <column name="display_ar" value="telesalesApp"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+            <column name="lookup_category_id"
+                    valueComputed="(
+                SELECT id
+                FROM ims_plp_service_db.lookup_category
+                WHERE code = 'SALES_CHANNEL')"/>
+        </insert>
+
+
+    </changeSet>
+
+
+
+</databaseChangeLog>

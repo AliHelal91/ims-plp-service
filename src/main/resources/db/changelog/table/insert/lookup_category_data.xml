@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+
+    <changeSet id="20260212_insert_lookup_category_1" author="Ali Hilal">
+        <validCheckSum>ANY</validCheckSum>
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="PRODUCT_CATEGORY"/>
+            <column name="name" value="product category"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="SALES_CHANNEL"/>
+            <column name="name" value="sales channel"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="TAX_CATEGORY"/>
+            <column name="name" value="tax category"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="SERIALIZATION"/>
+            <column name="name" value="serialization"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="IOT"/>
+            <column name="name" value="iot"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="PRICE_IDENTIFIER"/>
+            <column name="name" value="price identifier"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="PRODUCT_SUB_CATEGORY"/>
+            <column name="name" value="product sub category"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+        <insert tableName="lookup_category" schemaName="ims_plp_service_db">
+            <column name="id" valueSequenceNext="lookup_category_seq"/>
+            <column name="code" value="IDENTIFIER_TYPE"/>
+            <column name="name" value="identifier type"/>
+            <column name="is_active" valueBoolean="true"/>
+            <column name="created_at" valueDate="now()"/>
+            <column name="updated_at" valueDate="now()"/>
+        </insert>
+
+
+    </changeSet>
+
+</databaseChangeLog>
