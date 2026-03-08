@@ -1,9 +1,0 @@
-package com.channels.ims.ims_plp_services.repository;
-
-import com.channels.ims.ims_plp_services.entity.tables.SyncSchedules;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.UUID;
-
-public interface SyncSchedulesRepository extends JpaRepository<SyncSchedules, UUID> {
-}

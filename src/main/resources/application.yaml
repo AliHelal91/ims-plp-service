@@ -5,21 +5,42 @@ spring:
     url: jdbc:postgresql://localhost:5432/test2
     username: postgres
     password: 123456
-
-    jpa:
-      properties:
-        hibernate:
-          default_schema: ims_plp_service_db
-
-    #  jpa:
-    #    hibernate:
-    #      ddl-auto: create-drop
-    #    open-in-view: false
-
-  liquibase:
+  flyway:
+    schemas: ims_plp_service_db
+    default : ims_plp_service_db
     enabled: true
-    change-log: db/changelog/db.changelog-master.xml
-    default-schema: ims_plp_service_db
+    locations: classpath:db/migration
+
+feign:
+  httpclient:
+    enabled: true
+
+ssl:
+  key-store: classpath:certificates/stc-qa-keystore.p12
+  key-store-password: WUhjaVKrQjDc6j8Bdc9X
+  key-store-type: p12
+
+mtls:
+  keystore:
+    path: classpath:certificates/stc-qa-keystore.p12
+    password: WUhjaVKrQjDc6j8Bdc9X
+    type: PKCS12
+
+
+#    jpa:
+#      properties:
+#        hibernate:
+#          default_schema: ims_plp_service_db
+
+#      jpa:
+#        hibernate:
+#          ddl-auto: create-drop
+#        open-in-view: false
+
+#  liquibase:
+#    enabled: true
+#    change-log: db/changelog/db.changelog-master.xml
+#    default-schema: ims_plp_service_db
 kafka:
   bootstrap-servers: localhost:9092
   topic:
