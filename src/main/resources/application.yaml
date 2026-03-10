@@ -27,3 +27,31 @@ kafka:
   bootstrap-servers: localhost:9092
   topic:
     product-updates: product-topic
+
+#logging
+logging:
+  config: "classpath:logback/logback-spring-dev.xml"
+  file:
+    name: ${spring.application.name}
+    path: /opt/logs/${spring.application.name}
+  logback:
+    rollingpolicy:
+      max-file-size: "30MB"
+      max-history: 10
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:SSS} [%thread] [%-5level] %logger{55} [%X{traceId},%X{userId}] [%X{sourceName},%X{serviceNameUrl}] : %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{55} [%X{traceId},%X{userId}] [%X{sourceName},%X{serviceNameUrl}] : %msg%n"
+  level:
+    net:
+      ttddyy:
+        dsproxy:
+          listener: DEBUG
+    root: info
+    org:
+      apache.poi: warn
+      hibernate:
+        SQL: ERROR
+      springframework:
+        web: error
+        security: debug
+        scheduling: debug

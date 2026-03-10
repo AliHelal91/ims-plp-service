@@ -1,6 +1,8 @@
 package com.channels.ims.plp.exception;
 
 import com.channels.ims.plp.dto.general.ErrorResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -14,10 +16,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @RestControllerAdvice
 @ControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private final MessageSource messageSource;
 
 
     @ExceptionHandler(ResourceException.class)
@@ -25,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .error(ex.getMessage())
                 .status(ex.getStatus().value())
-                .message(ex.getMessage())
+                .message(messageSource.getMessage(ex.getMessage(), null, ex.getLocale()))
                 .build();
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
@@ -47,7 +53,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final ErrorResponse errorResponse = ErrorResponse.builder()
                 .errors(errors)
                 .status(status.value())
-                .message(ExceptionKey.NOT_VALID_REQUEST)
+                .message(messageSource.getMessage(ExceptionKey.NOT_VALID_REQUEST, null, Locale.getDefault()))
                 .build();
 
         return new ResponseEntity<>(
