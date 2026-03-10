@@ -10,4 +10,5 @@ public class SystemConstant {
     public static final String MICRO_SERVICE_SOURCE_HEADER = "micro-service-source";
     public static final String SOURCE ="source" ;
     public static final String COUNTRY_CODE_SA = "SA";
+    public static final String COUNTRY_CODE = "countryCode";
 }

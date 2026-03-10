@@ -1,4 +1,4 @@
-package com.channels.ims.plp.dto.prs.create;
+package com.channels.ims.plp.dto.prs.create.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Builder
-public class ProductSpecCharacteristicValue {
+public class ProdSpecCharValueUse {
 
-    private String value;
+    private String id;
+    private List<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
 }

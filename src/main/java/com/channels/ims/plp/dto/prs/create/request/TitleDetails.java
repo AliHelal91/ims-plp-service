@@ -1,4 +1,5 @@
-package com.channels.ims.plp.dto.prs.create;
+package com.channels.ims.plp.dto.prs.create.request;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +14,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class ProductSpecification {
+public class TitleDetails {
 
-    private String name;
-    private String id;
+    private String text;
+    private String language;
 }

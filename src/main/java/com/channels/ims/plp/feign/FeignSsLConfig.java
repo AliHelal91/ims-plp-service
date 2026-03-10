@@ -1,7 +1,15 @@
 package com.channels.ims.plp.feign;
 
+import com.channels.ims.plp.dto.prs.create.response.PrsCreateErrorResponse;
+import com.channels.ims.plp.dto.prs.create.response.PrsCreateResponse;
+import com.channels.ims.plp.exception.ExceptionKey;
+import com.channels.ims.plp.exception.ResourceException;
+import com.google.gson.Gson;
 import feign.Client;
+import feign.Response;
+import feign.codec.ErrorDecoder;
 import feign.hc5.ApacheHttp5Client;
+import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
@@ -12,15 +20,22 @@ import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 
 import javax.net.ssl.SSLContext;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
+import java.util.Locale;
 
 @Configuration
-public class FeignSsLConfig {
+@RequiredArgsConstructor
+public class FeignSsLConfig implements ErrorDecoder {
+
+    private final Gson gson;
 
     @Value("${ssl.key-store}")
     private Resource keyStore;
@@ -55,5 +70,35 @@ public class FeignSsLConfig {
                 .build();
 
         return new ApacheHttp5Client(httpClient);
+    }
+
+    @Override
+    public Exception decode(String methodKey, Response response) {
+
+        try {
+
+            String body = null;
+
+            if (response.body() != null) {
+                body = new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            }
+
+            PrsCreateErrorResponse errorResponse =
+                    gson.fromJson(body, PrsCreateErrorResponse.class);
+
+            return new ResourceException(
+                    errorResponse.getError().getCode(),
+                    HttpStatus.valueOf(Integer.parseInt(errorResponse.getHttpStatusCode())),
+                    Locale.getDefault()
+            );
+
+        } catch (Exception e) {
+
+            return new ResourceException(
+                    ExceptionKey.ERROR_STC_INTEGRATION,
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    Locale.getDefault()
+            );
+        }
     }
 }

@@ -1,1 +1,0 @@
-CREATE SCHEMA IF NOT EXISTS ims_plp_service_db;

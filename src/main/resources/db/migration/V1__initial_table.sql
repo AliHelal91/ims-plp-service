@@ -13,10 +13,15 @@ CREATE TABLE ims_plp_service_db.lookup_category (
 );
 ---------------------------------------------- lookup_value --------------------------------------------------
 
-CREATE SEQUENCE ims_plp_service_db.lookup_value_seq
-START WITH 1
-INCREMENT BY 1;
+-- Sequence
+CREATE SEQUENCE IF NOT EXISTS ims_plp_service_db.lookup_value_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
+-- Table
 CREATE TABLE ims_plp_service_db.lookup_value (
     id BIGINT PRIMARY KEY DEFAULT nextval('ims_plp_service_db.lookup_value_seq'),
     value VARCHAR(255) NOT NULL,
@@ -26,32 +31,28 @@ CREATE TABLE ims_plp_service_db.lookup_value (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     lookup_category_id BIGINT,
-    CONSTRAINT fk_lookup_category FOREIGN KEY (lookup_category_id)
-        REFERENCES ims_plp_service_db.lookup_category (id)
-        ON DELETE SET NULL
+
+    CONSTRAINT fk_lookup_value_category
+        FOREIGN KEY (lookup_category_id)
+        REFERENCES ims_plp_service_db.lookup_category(id)
 );
 
-CREATE INDEX idx_lookup_value_category
-ON ims_plp_service_db.lookup_value (lookup_category_id);
-
-CREATE INDEX idx_lookup_value_value
-ON ims_plp_service_db.lookup_value (value);
-
 --------------------------------------------Request----------------------------------------------------
+-- Table
 CREATE TABLE ims_plp_service_db.request (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     sync_batch_id VARCHAR(255) NOT NULL,
-    request_type VARCHAR(50) NOT NULL,
+    request_type VARCHAR(100) NOT NULL,
     request_payload JSONB NOT NULL,
     response_payload JSONB,
     parent_history_id VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    error_type VARCHAR(50),
-    error_code VARCHAR(50),
-    error_message VARCHAR(255),
+    status VARCHAR(100) NOT NULL,
+    error_type VARCHAR(100),
+    error_code VARCHAR(100),
+    error_message TEXT,
     retry_count INTEGER NOT NULL DEFAULT 0,
     max_retries INTEGER NOT NULL DEFAULT 3,
-    next_retry_at INTEGER,
+    next_retry_at TIMESTAMP,
     started_at TIMESTAMP NOT NULL,
     completed_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -165,3 +166,26 @@ ON ims_plp_service_db.sync_schedules (status);
 
 CREATE INDEX idx_sync_schedules_scheduled_at
 ON ims_plp_service_db.sync_schedules (scheduled_at);
+
+-----------------------------------------------general_configuration-------------------------------------------------
+-- Sequence
+CREATE SEQUENCE IF NOT EXISTS ims_plp_service_db.general_configuration_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+-- Table
+CREATE TABLE ims_plp_service_db.general_configuration (
+    id BIGINT PRIMARY KEY
+        DEFAULT nextval('ims_plp_service_db.general_configuration_seq'),
+    code VARCHAR(255) NOT NULL UNIQUE,
+    value VARCHAR(255) NOT NULL,
+    status VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_general_configuration_status
+ON ims_plp_service_db.general_configuration(status);

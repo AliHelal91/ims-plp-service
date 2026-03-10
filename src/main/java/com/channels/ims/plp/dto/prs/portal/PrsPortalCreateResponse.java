@@ -1,4 +1,4 @@
-package com.channels.ims.plp.dto.prs.create;
+package com.channels.ims.plp.dto.prs.portal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,8 +15,9 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
-public class ProdSpecCharValueUse {
+public class PrsPortalCreateResponse {
 
-    private String id;
-    private List<ProductSpecCharacteristicValue> productSpecCharacteristicValue;
+    private String status;
+    private String requestId;
+    private LocalDateTime completedAt;
 }

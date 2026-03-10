@@ -1,4 +1,4 @@
-package com.channels.ims.plp.dto.prs.create;
+package com.channels.ims.plp.dto.prs.create.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

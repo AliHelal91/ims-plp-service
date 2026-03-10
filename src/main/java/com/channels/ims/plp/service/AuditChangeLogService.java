@@ -1,6 +1,5 @@
 package com.channels.ims.plp.service;
 
-import com.channels.ims.plp.entity.tables.AuditChangeLog;
 import com.channels.ims.plp.enums.AuditTriggeredSystemEnums;
 import com.channels.ims.plp.enums.ChangeAction;
 import com.channels.ims.plp.enums.EntityTypeEnums;
@@ -44,31 +43,6 @@ public class AuditChangeLogService {
                                ChangeAction changeAction,
                                AuditTriggeredSystemEnums triggeredSystem) {
 
-        if (originalEntity != null) {
-
-            // Set of Ignored Filed
-            Set<String> ignored = Set.of("id", "createdAt", "updatedAt");
-
-            // Find All Changed Field
-            Map<String, Object[]> changedField = calculateDiff(originalEntity,
-                    updatedEntity, ignored, Locale.getDefault());
-
-            // Save in Audit Table
-            auditChangeLogRepository.save(AuditChangeLog.builder()
-                    .entityType(entityTypeEnums)
-                    .entityId(entityId)
-                    .action(changeAction)
-                    .changeReason(changeAction.name())
-                    .changedFields(changedField.keySet().stream().toList())
-                    .beforeState(originalEntity.toString())
-                    .afterStatus(updatedEntity.toString())
-                    .syncBatchId(null)
-                    .requestId(null)
-                    .sourceSystem("")
-                    .triggeredBy(triggeredSystem.name())
-                    .build());
-
-        }
     }
 
 

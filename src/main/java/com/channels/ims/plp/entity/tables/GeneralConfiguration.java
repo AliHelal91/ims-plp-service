@@ -1,12 +1,10 @@
-package com.channels.ims.plp.entity.lookup;
+package com.channels.ims.plp.entity.tables;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,6 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -27,26 +26,23 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @Entity
-@Table(name = "lookup_value", schema = "ims_plp_service_db")
-public class LookupValue {
+@Table(name = "general_configuration", schema = "ims_plp_service_db")
+public class GeneralConfiguration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lookup_value_gen")
-    @SequenceGenerator(name = "lookup_value_gen", sequenceName = "lookup_value_seq",
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "general_configuration_gen")
+    @SequenceGenerator(name = "general_configuration_gen", sequenceName = "general_configuration_seq",
             allocationSize = 1, schema = "ims_plp_service_db")
     private Long id;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "code" , nullable = false,unique = true)
+    private String code;
+
+    @Column(name = "value" , nullable = false)
     private String value;
 
-    @Column(name = "display_en", nullable = false)
-    private String displayEN;
-
-    @Column(name = "display_ar")
-    private String displayAR;
-
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    @Column(name = "status" , nullable = false)
+    private String status;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
@@ -55,8 +51,4 @@ public class LookupValue {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updateAt;
-
-    @ManyToOne
-    @JoinColumn(name = "lookup_category_id",referencedColumnName = "id")
-    private LookupCategory lookupCategory;
 }

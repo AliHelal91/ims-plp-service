@@ -55,15 +55,14 @@ public class Request {
     private String responsePayload;
 
     @Column(name = "parent_history_id", nullable = false)
-    private String parent_history_id;
+    private String parentHistoryId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private SyncStatusEnums status;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "error_type")
-    private SyncErrorTypeEnums errorType;
+    private String errorType;
 
     @Column(name = "error_code")
     private String errorCode;
@@ -78,7 +77,7 @@ public class Request {
     private Integer maxRetries;
 
     @Column(name = "next_retry_at")
-    private Integer nextRetryAt;
+    private LocalDateTime nextRetryAt;
 
     @Column(name = "started_at", nullable = false)
     private LocalDateTime startedAt;

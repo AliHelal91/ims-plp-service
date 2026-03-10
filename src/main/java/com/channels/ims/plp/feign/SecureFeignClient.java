@@ -1,5 +1,7 @@
 package com.channels.ims.plp.feign;
 
+import com.channels.ims.plp.dto.prs.create.request.PrsCreateRequest;
+import com.channels.ims.plp.dto.prs.create.response.PrsCreateResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface SecureFeignClient {
 
     @PostMapping
-    String getSecureData(@RequestBody String body);
+    PrsCreateResponse createPRS(@RequestBody PrsCreateRequest  prsCreateRequest);
 }
