@@ -1,5 +1,6 @@
 package com.channels.ims.plp.service;
 
+import com.channels.ims.plp.constant.SystemConstant;
 import com.channels.ims.plp.dto.model.ModelDetailsResponse;
 import com.channels.ims.plp.dto.model.ModelSpecificationResponseDTO;
 import com.channels.ims.plp.dto.prs.create.request.PhysicalResourceSpecification;
@@ -55,10 +56,15 @@ public class PrsService {
         // Find Request Language
         Locale locale = Utils.getLocale(httpServletRequest);
 
+        // Create Request with the Initial Status (Pending)
+        Request request = requestService.createRequest(
+                RequestType.PRS_CREATE,
+                locale);
+
         // Prepare the Create PRS with STC Request
         PrsCreateRequest prsCreateRequest = PrsCreateRequest.builder()
-                .imsProjectId("IMS_PRJ_009")
-                .manualTesting("true")
+                .imsProjectId(request.getImsProductId().toString())
+                .manualTesting(SystemConstant.MANUAL_TESTING_VALUE)
                 .build();
 
         List<PhysicalResourceSpecification> physicalResourceSpecification = new ArrayList<>();
@@ -77,7 +83,7 @@ public class PrsService {
             // add to the physicalResourceSpecification list
             physicalResourceSpecification.add(PhysicalResourceSpecification.builder()
                     .name(modelDetails.getNameEn())
-                    .productType("") //ToDo Check with Manoj
+                    .productType(model.getProductType())
                     .productSpecification(ProductSpecification.builder()
                             .id(model.getModelId().toString())
                             .name(model.getModelNameEN())
@@ -85,23 +91,17 @@ public class PrsService {
                     .prodSpecCharValueUse(prodSpecCharValueUses)
                     .title(titleDetails)
                     .validFor(SpecificDate.builder()
-                            .endDateTime("valid For Date")//ToDo Check with Manoj
+                            .endDateTime(model.getValidForDate())
                             .build())
                     .availableFor(SpecificDate.builder()
-                            .startDateTime("available For Date")//ToDo Check with Manoj
+                            .startDateTime(model.getAvailableDate())
                             .build())
                     .build());
         }
 
         prsCreateRequest.setPhysicalResourceSpecification(physicalResourceSpecification);
 
-        // Create Request with the Initial Status (Pending)
-        Request request = requestService.createRequest(
-                prsCreateRequest.getImsProjectId(),
-                gson.toJson(prsCreateRequest),
-                RequestType.PRS_CREATE,
-                null,
-                locale);
+
 
         // Sync With STC
         request = syncWithSTC(prsCreateRequest, request);
@@ -153,12 +153,12 @@ public class PrsService {
         List<TitleDetails> titleDetails = new ArrayList<>();
 
         titleDetails.add(TitleDetails.builder()
-                .language("en-xx")//ToDo Check with Manoj
+                .language(SystemConstant.EN_LANGUAGE_CODE)
                 .text(modelDetails.getNameEn())
                 .build());
 
         titleDetails.add(TitleDetails.builder()
-                .language("ar-xx")//ToDo Check with Manoj
+                .language(SystemConstant.AR_LANGUAGE_CODE)
                 .text(modelDetails.getNameAr())
                 .build());
 
@@ -196,25 +196,24 @@ public class PrsService {
                     .build());
         }
         prodSpecCharValueUses.add(ProdSpecCharValueUse.builder()
-                .id("filterCriteria")//ToDo Check with Manoj
+                .id(SystemConstant.FILTER_CRITERIA)
                 .productSpecCharacteristicValue(productSpecCharacteristicFiltersValues)
                 .build());
 
         prodSpecCharValueUses.add(ProdSpecCharValueUse.builder()
-                .id("category")//ToDo Check with Manoj
+                .id(SystemConstant.CATEGORY)
                 .productSpecCharacteristicValue(List.of(ProductSpecCharacteristicValue.builder()
                         .value(model.getClassificationDetails().getCategory())
                         .build()))
                 .build());
 
         prodSpecCharValueUses.add(ProdSpecCharValueUse.builder()
-                .id("subcategory")//ToDo Check with Manoj
+                .id(SystemConstant.SUBCATEGORY)
                 .productSpecCharacteristicValue(List.of(ProductSpecCharacteristicValue.builder()
                         .value(model.getClassificationDetails().getSubCategory())
                         .build()))
                 .build());
 
-        //ToDo Check with Manoj  Spec productSubSubCategory,productSubSubSubCategory
         return prodSpecCharValueUses;
     }
 

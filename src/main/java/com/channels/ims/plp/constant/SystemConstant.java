@@ -11,4 +11,12 @@ public class SystemConstant {
     public static final String SOURCE ="source" ;
     public static final String COUNTRY_CODE_SA = "SA";
     public static final String COUNTRY_CODE = "countryCode";
+
+    // PRS Request Constant
+    public static final String FILTER_CRITERIA = "filterCriteria";
+    public static final String CATEGORY = "category";
+    public static final String SUBCATEGORY = "subcategory";
+    public static final String EN_LANGUAGE_CODE = "en-xx";
+    public static final String AR_LANGUAGE_CODE = "ar-xx";
+    public static final String MANUAL_TESTING_VALUE = "true";
 }

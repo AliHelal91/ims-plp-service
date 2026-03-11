@@ -8,7 +8,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,11 +37,16 @@ import java.util.UUID;
 public class Request {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "request_gen")
+    @SequenceGenerator(name = "request_gen", sequenceName = "request_seq",
+            allocationSize = 1, schema = "ims_plp_service_db")
     @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    private Long id;
 
-    @Column(name = "sync_batch_id", nullable = false)
+    @Column(name = "ims_product_id",unique = true,nullable = false)
+    private UUID imsProductId;
+
+    @Column(name = "sync_batch_id")
     private String syncBatchId;
 
     @Enumerated(EnumType.STRING)
@@ -54,7 +61,7 @@ public class Request {
     @Column(name = "response_payload", columnDefinition = "jsonb")
     private String responsePayload;
 
-    @Column(name = "parent_history_id", nullable = false)
+    @Column(name = "parent_history_id")
     private String parentHistoryId;
 
     @Enumerated(EnumType.STRING)

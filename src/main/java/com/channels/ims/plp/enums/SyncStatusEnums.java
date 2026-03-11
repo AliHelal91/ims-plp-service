@@ -6,5 +6,6 @@ public enum SyncStatusEnums {
     IN_PROGRESS,
     SYNCED,
     FAILED,
-    RETRYING
+    RETRYING,
+    INITIAL
 }

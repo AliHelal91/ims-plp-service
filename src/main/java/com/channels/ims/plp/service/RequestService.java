@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +36,11 @@ public class RequestService {
     /**
      * Prepare and Create The Request Details
      *
-     * @param syncBatchId     syncBatchId
-     * @param requestPayload  requestPayload
      * @param requestType     requestType
-     * @param parentRequestId parentRequestId
      * @param locale          locale
      * @return Request
      */
-    public Request createRequest(String syncBatchId,
-                                 String requestPayload,
-                                 RequestType requestType,
-                                 String parentRequestId,
+    public Request createRequest(RequestType requestType,
                                  Locale locale) {
 
         // Fetch the Max Retry Config
@@ -55,12 +50,10 @@ public class RequestService {
 
         // Prepare the Request Details
         Request request = Request.builder()
-                .syncBatchId(syncBatchId)
                 .requestType(requestType)
-                .requestPayload(requestPayload)
+                .imsProductId(UUID.randomUUID())
                 .responsePayload(null) // it will be updated after the call
-                .parentHistoryId(parentRequestId)
-                .status(SyncStatusEnums.PENDING)
+                .status(SyncStatusEnums.INITIAL)
                 .errorType(null)  // it will be updated if error appear
                 .errorCode(null)  // it will be updated if error appear
                 .errorMessage(null) // it will be updated if error appear

@@ -75,4 +75,11 @@ public class PrsPortalCreateDetails {
     @NotNull(message = "PrsPortalCreateDetails.modelVideo.NotNull")
     @NotEmpty(message = "PrsPortalCreateDetails.modelVideo.NotEmpty")
     private String modelVideo;
+
+
+    private String availableDate;
+
+    private String validForDate;
+
+    private String productType;
 }
