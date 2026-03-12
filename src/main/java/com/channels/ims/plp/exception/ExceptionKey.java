@@ -8,4 +8,5 @@ public class ExceptionKey {
     public static final String NOT_VALID_NUMBER = "NOT_VALID_NUMBER";
     public static final String INTERNAL_SERVER_ERROR ="INTERNAL_SERVER_ERROR" ;
     public static final String ERROR_STC_INTEGRATION ="ERROR_STC_INTEGRATION" ;
+    public static final String PRODUCT_NOT_FOUND ="PRODUCT_NOT_FOUND" ;
 }

@@ -54,7 +54,7 @@ public class Request {
     private RequestType requestType;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "request_payload",nullable = false, columnDefinition = "jsonb")
+    @Column(name = "request_payload",columnDefinition = "jsonb")
     private String requestPayload;
 
     @JdbcTypeCode(SqlTypes.JSON)

@@ -35,7 +35,7 @@ public class ProductDetailsMapper {
 //        product.setVendorItemCode(productDTO.getVendorItemCode());
 //        product.setIsBundled(productDTO.getIsBundled());
 //        product.setBrandAr(productDTO.getBrandAr());
-        product.setItemCode(productDTO.getBrandEn());
+        product.setItemCode(productDTO.getItemCode());
 //        product.setModelAr(productDTO.getModelAr());
 //        product.setModelEn(productDTO.getModelEn());
 //        product.setColorAr(productDTO.getColorAr());

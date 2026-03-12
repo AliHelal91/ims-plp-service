@@ -11,7 +11,6 @@ import com.channels.ims.plp.dto.prs.create.request.PrsCreateRequest;
 import com.channels.ims.plp.dto.prs.create.request.SpecificDate;
 import com.channels.ims.plp.dto.prs.create.request.TitleDetails;
 import com.channels.ims.plp.dto.prs.create.response.PrsCreateResponse;
-import com.channels.ims.plp.dto.prs.portal.PrsPortalCreateDetails;
 import com.channels.ims.plp.dto.prs.portal.PrsPortalCreateRequest;
 import com.channels.ims.plp.dto.prs.portal.PrsPortalCreateResponse;
 import com.channels.ims.plp.entity.tables.Request;
@@ -21,9 +20,7 @@ import com.channels.ims.plp.exception.ResourceException;
 import com.channels.ims.plp.feign.ModelFeignClient;
 import com.channels.ims.plp.feign.SecureFeignClient;
 import com.channels.ims.plp.mapper.PrsMapper;
-import com.channels.ims.plp.util.Utils;
 import com.google.gson.Gson;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,14 +44,11 @@ public class PrsService {
      * PRS Portal Create  Service
      *
      * @param prsPortalCreateRequest PrsPortalCreateRequest
-     * @param httpServletRequest     HttpServletRequest
+     * @param locale                 Locale
      * @return PrsPortalCreateResponse
      */
     public PrsPortalCreateResponse createPrs(PrsPortalCreateRequest prsPortalCreateRequest,
-                                             HttpServletRequest httpServletRequest) {
-
-        // Find Request Language
-        Locale locale = Utils.getLocale(httpServletRequest);
+                                             Locale locale) {
 
         // Create Request with the Initial Status (Pending)
         Request request = requestService.createRequest(
@@ -69,39 +63,37 @@ public class PrsService {
 
         List<PhysicalResourceSpecification> physicalResourceSpecification = new ArrayList<>();
 
-        for (PrsPortalCreateDetails model : prsPortalCreateRequest.getModels()) {
+        // Find Model Details from the ims-product-service
+        ModelDetailsResponse modelDetails = modelFeignClient.getModelDetails(prsPortalCreateRequest.getModelId());
 
-            // Find Model Details from the ims-product-service
-            ModelDetailsResponse modelDetails = modelFeignClient.getModelDetails(model.getModelId());
+        // prepare the list of ProdSpecCharValueUse
+        List<ProdSpecCharValueUse> prodSpecCharValueUses = getProdSpecCharValueUse(prsPortalCreateRequest,
+                modelDetails);
 
-            // prepare the list of ProdSpecCharValueUse
-            List<ProdSpecCharValueUse> prodSpecCharValueUses = getProdSpecCharValueUse(model, modelDetails);
+        // prepare the list of TitleDetails
+        List<TitleDetails> titleDetails = getTitleDetails(modelDetails);
 
-            // prepare the list of TitleDetails
-            List<TitleDetails> titleDetails = getTitleDetails(modelDetails);
-
-            // add to the physicalResourceSpecification list
-            physicalResourceSpecification.add(PhysicalResourceSpecification.builder()
-                    .name(modelDetails.getNameEn())
-                    .productType(model.getProductType())
-                    .productSpecification(ProductSpecification.builder()
-                            .id(model.getModelId().toString())
-                            .name(model.getModelNameEN())
-                            .build())
-                    .prodSpecCharValueUse(prodSpecCharValueUses)
-                    .title(titleDetails)
-                    .validFor(SpecificDate.builder()
-                            .endDateTime(model.getValidForDate())
-                            .build())
-                    .availableFor(SpecificDate.builder()
-                            .startDateTime(model.getAvailableDate())
-                            .build())
-                    .build());
-        }
+        // add to the physicalResourceSpecification list
+        physicalResourceSpecification.add(PhysicalResourceSpecification.builder()
+                .name(modelDetails.getNameEn())
+                .productType(prsPortalCreateRequest.getProductType())
+                .productSpecification(ProductSpecification.builder()
+                        .id(prsPortalCreateRequest.getModelId().toString())
+                        .name(modelDetails.getNameEn())
+                        .build())
+                .prodSpecCharValueUse(prodSpecCharValueUses)
+                .title(titleDetails)
+                .validFor(SpecificDate.builder()
+                        .endDateTime(prsPortalCreateRequest.getValidForDate())
+                        .build())
+                .availableFor(SpecificDate.builder()
+                        .startDateTime(prsPortalCreateRequest.getAvailableDate())
+                        .build())
+                .build());
 
         prsCreateRequest.setPhysicalResourceSpecification(physicalResourceSpecification);
 
-
+        request.setRequestPayload(gson.toJson(prsCreateRequest));
 
         // Sync With STC
         request = syncWithSTC(prsCreateRequest, request);
@@ -172,7 +164,7 @@ public class PrsService {
      * @param modelDetails ModelDetailsResponse
      * @return ProdSpecCharValueUse List
      */
-    private List<ProdSpecCharValueUse> getProdSpecCharValueUse(PrsPortalCreateDetails model,
+    private List<ProdSpecCharValueUse> getProdSpecCharValueUse(PrsPortalCreateRequest model,
                                                                ModelDetailsResponse modelDetails) {
         List<ProdSpecCharValueUse> prodSpecCharValueUses = new ArrayList<>();
         for (ModelSpecificationResponseDTO modelSpecification : modelDetails.getModelSpecifications()) {

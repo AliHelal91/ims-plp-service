@@ -55,3 +55,11 @@ logging:
         web: error
         security: debug
         scheduling: debug
+
+product:
+  service:
+    url: localhost:9050
+
+stc:
+  sync:
+    url: https://sandbox.api.stc.com.sa:9512/s-tmf/productCatalogManagement/consumer/v1

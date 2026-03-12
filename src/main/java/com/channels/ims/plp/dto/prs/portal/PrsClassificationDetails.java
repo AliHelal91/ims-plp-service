@@ -24,8 +24,4 @@ public class PrsClassificationDetails {
     @NotNull(message = "PrsClassificationDetails.subCategory.NotNull")
     @NotEmpty(message = "PrsClassificationDetails.subCategory.NotEmpty")
     private String subCategory;
-
-    @NotNull(message = "PrsClassificationDetails.year.NotNull")
-    @NotEmpty(message = "PrsClassificationDetails.year.NotEmpty")
-    private String year;
 }

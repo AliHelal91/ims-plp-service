@@ -53,6 +53,12 @@ public class Products {
     @Column(name = "name_ar")
     private String nameAR;
 
+    @Column(name = "model_id", nullable = false)
+    private Integer modelId;
+
+    @Column(name = "model_code", nullable = false)
+    private String modelCode;
+
     @Column(name = "description_en")
     private String descriptionEN;
 

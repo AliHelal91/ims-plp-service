@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
         name = "modelClient",
-        url = "https://sandbox.api.stc.com.sa:9512/s-tmf/productCatalogManagement/consumer/v1/bulk/prs",
+        url = "${product.service.url}",
         configuration = FeignSsLConfig.class
 )
 public interface ModelFeignClient {
 
-    @GetMapping
-    ModelDetailsResponse getModelDetails(@RequestParam(value = "modelId") Integer modelId);
+    @GetMapping("/models/getAll")
+    ModelDetailsResponse getModelDetails(@RequestParam(value = "id") Integer modelId);
 }
