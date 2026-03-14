@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class PrsCreateErrorResponse {
+public class STCErrorResponse {
 
     private String httpStatusCode;
     private STCErrorDetails   error;

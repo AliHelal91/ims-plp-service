@@ -1,7 +1,6 @@
 package com.channels.ims.plp.feign;
 
-import com.channels.ims.plp.dto.prs.create.response.PrsCreateErrorResponse;
-import com.channels.ims.plp.dto.prs.create.response.PrsCreateResponse;
+import com.channels.ims.plp.dto.prs.create.response.STCErrorResponse;
 import com.channels.ims.plp.exception.ExceptionKey;
 import com.channels.ims.plp.exception.ResourceException;
 import com.google.gson.Gson;
@@ -20,7 +19,6 @@ import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -83,8 +81,8 @@ public class FeignSsLConfig implements ErrorDecoder {
                 body = new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8);
             }
 
-            PrsCreateErrorResponse errorResponse =
-                    gson.fromJson(body, PrsCreateErrorResponse.class);
+            STCErrorResponse errorResponse =
+                    gson.fromJson(body, STCErrorResponse.class);
 
             return new ResourceException(
                     errorResponse.getError().getCode(),

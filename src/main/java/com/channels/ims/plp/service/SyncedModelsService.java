@@ -16,23 +16,19 @@ public class SyncedModelsService {
 
 
     /**
-     * check if Model is Synced Before
+     * check if Model is Synced Before or Not
      *
-     * @param modelId Model id
+     * @param modelCode Model Code
      * @return Boolean
      */
-    public boolean isModelSynced(Integer modelId) {
+    public boolean isModelSynced(String modelCode) {
 
-        Optional<SyncedModels> syncedModels = syncedModelsRepository.findByModelId(modelId);
+        // Find Synced Model by Model Code
+        Optional<SyncedModels> syncedModels = syncedModelsRepository.findByModelCode(modelCode);
 
-        if (syncedModels.isEmpty()) {
-            return false;
-        }
+        // return True if Synced other return false
+        return syncedModels.map(models -> models.getStatus().equals(SyncStatusEnums.SYNCED.name()))
+                .orElse(false);
 
-        if (syncedModels.get().getStatus().equals(SyncStatusEnums.SYNCED.name())) {
-            return true;
-        }
-
-        return false;
     }
 }

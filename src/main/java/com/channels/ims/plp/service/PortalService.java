@@ -30,13 +30,14 @@ public class PortalService {
 
         for (ProductDetails productDetail : portalSyncProductRequest.getProductDetails()) {
 
-            // Find Product By Product ID
+            // Find Product By Product ID fetch from Table Product Master
             Products product = productsService.findByProductId(productDetail.getProductId(), locale);
 
             // Validate Product Values (Sync Status, available Date, valid Date)
             validateProduct(product, productDetail, locale);
 
-            if (!syncedModelsService.isModelSynced(product.getModelId())) {
+            // Check if Model(PRS) is Synced or not
+            if (!syncedModelsService.isModelSynced(product.getModelCode())) {
 
                 // Synce the Model First (PRS Request)
                 PrsPortalCreateResponse prsResponse = prsService.createPrs(

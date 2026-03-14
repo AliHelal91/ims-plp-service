@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface SyncedModelsRepository extends JpaRepository<SyncedModels,Long> {
 
-    Optional<SyncedModels> findByModelId(Integer modelId);
+    Optional<SyncedModels> findByModelCode(String modelCode);
 }

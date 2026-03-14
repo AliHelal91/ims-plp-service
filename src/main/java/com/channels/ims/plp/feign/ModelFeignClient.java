@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(
         name = "modelClient",
         url = "${product.service.url}",
-        configuration = FeignSsLConfig.class
+        configuration = GeneralFeignConfig.class
 )
 public interface ModelFeignClient {
 
