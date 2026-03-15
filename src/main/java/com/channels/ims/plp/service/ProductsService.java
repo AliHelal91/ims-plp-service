@@ -52,7 +52,8 @@ public class ProductsService {
                 EntityTypeEnums.PRODUCT,
                 updatedProduct.getId(),
                 ChangeAction.UPDATE,
-                AuditTriggeredSystemEnums.KAFKA_LISTENERS);
+                AuditTriggeredSystemEnums.KAFKA_LISTENERS,
+                originalProduct.getRequest());
 
     }
 
@@ -66,8 +67,9 @@ public class ProductsService {
 
     /**
      * Find Product By Product ID
+     *
      * @param productId Product ID
-     * @param locale Locale
+     * @param locale    Locale
      * @return Product
      */
     public Products findByProductId(Integer productId, Locale locale) {

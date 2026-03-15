@@ -1,19 +1,33 @@
 package com.channels.ims.plp.service;
 
+import com.channels.ims.plp.constant.SystemConstant;
+import com.channels.ims.plp.entity.tables.AuditChangeLog;
+import com.channels.ims.plp.entity.tables.Request;
 import com.channels.ims.plp.enums.AuditTriggeredSystemEnums;
 import com.channels.ims.plp.enums.ChangeAction;
 import com.channels.ims.plp.enums.EntityTypeEnums;
+import com.channels.ims.plp.enums.SyncErrorTypeEnums;
 import com.channels.ims.plp.exception.ExceptionKey;
 import com.channels.ims.plp.exception.ResourceException;
 import com.channels.ims.plp.repository.AuditChangeLogRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -41,7 +55,22 @@ public class AuditChangeLogService {
                                EntityTypeEnums entityTypeEnums,
                                UUID entityId,
                                ChangeAction changeAction,
-                               AuditTriggeredSystemEnums triggeredSystem) {
+                               AuditTriggeredSystemEnums triggeredSystem,
+                               Request request) {
+
+        AuditChangeLog.builder()
+                .entityType(entityTypeEnums)
+                .entityId(entityId)
+                .action(changeAction)
+                .changeReason(null)
+                .changedFields(calculateDiff(originalEntity,updatedEntity, SystemConstant.IGNORE_FIELD,
+                        Locale.getDefault()).toString())
+                .beforeState(originalEntity.toString())
+                .afterStatus(updatedEntity.toString())
+                .syncBatchId(request.getSyncBatchId())
+                .requestId(request)
+                .triggeredBy(triggeredSystem.name())
+                .build();
 
     }
 

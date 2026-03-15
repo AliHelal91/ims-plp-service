@@ -11,4 +11,5 @@ public class ExceptionKey {
     public static final String PRODUCT_NOT_FOUND ="PRODUCT_NOT_FOUND" ;
     public static final String MODEL_SYNCED ="MODEL_SYNCED" ;
     public static final String SYNCED_MODEL_NOT_FOUND ="SYNCED_MODEL_NOT_FOUND" ;
+    public static final String NOT_VALID_BOOLEAN_VALUE ="NOT_VALID_BOOLEAN_VALUE" ;
 }

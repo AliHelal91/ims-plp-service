@@ -1,12 +1,16 @@
 package com.channels.ims.plp.mapper;
 
-import com.channels.ims.plp.constant.SystemConstant;
 import com.channels.ims.plp.dto.kafka.ProductAddlAttrDTO;
 import com.channels.ims.plp.dto.kafka.ProductDTO;
 import com.channels.ims.plp.entity.tables.Products;
+import com.channels.ims.plp.entity.tables.Request;
+import com.channels.ims.plp.enums.SyncStatusEnums;
+import com.channels.ims.plp.util.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -19,38 +23,37 @@ public class ProductDetailsMapper {
         if (product == null) {
             product = new Products();
         }
-
         product.setProductId(productDTO.getProductId());
-        product.setNameAR(productDTO.getNameAr());
+        product.setItemCode(productDTO.getItemCode());
         product.setNameEN(productDTO.getNameEn());
+        product.setNameAR(productDTO.getNameAr());
+        product.setModelId(null);  // ToDo needed from ims-product-details
+        product.setModelCode(null);// ToDo needed from ims-product-details
         product.setDescriptionEN(productDTO.getDescription());
-//        product.setProductStatus(productDTO.getInventoryStatus());
-        product.setItemCode(productDTO.getItemCode());
-//        product.setVatCategory(productDTO.getVatCategory());
-//        product.setVatValue(productDTO.getVatValue() != null ? productDTO.getVatValue()/100 : null);
-//        product.setErpInventoryItemId(productDTO.getErpInventoryItemId());
-        product.setProductCategory(productDTO.getParentCategory());
-        product.setProductSubCategory(productDTO.getChildCategory());
-//        product.setBusinessGroupCode(productDTO.getBusinessGroupCode());
-//        product.setVendorItemCode(productDTO.getVendorItemCode());
-//        product.setIsBundled(productDTO.getIsBundled());
-//        product.setBrandAr(productDTO.getBrandAr());
-        product.setItemCode(productDTO.getItemCode());
-//        product.setModelAr(productDTO.getModelAr());
-//        product.setModelEn(productDTO.getModelEn());
-//        product.setColorAr(productDTO.getColorAr());
-//        product.setColorEn(productDTO.getColorEn());
-//        product.setCapacityEn(productDTO.getCapacityEn());
-//        product.setBarCode(productDTO.getBarCode());
+        product.setDescriptionAR(productDTO.getDescriptionAr());
+        product.setProductCategory(productDTO.getProductTypeCategory()); // ToDo need to Validate
+        product.setProductSubCategory(productDTO.getProductSubTypeCategory()); // ToDo need to Validate
+        product.setCountryCode(productDTO.getCountryCode());
+        product.setProductType(product.getProductType());
+        product.setManufacturer(productDTO.getManufacturer());
+        product.setAttributes(productDTO.getAttribute());
+        product.setSyncStatus(SyncStatusEnums.PENDING);
+        product.setProductVersion(0); // As Initial Value start from 0
+        product.setSyncedVersion(0); // As Initial Value start from 0
+        product.setLastSyncedAt(null); // should be null Product not Synced yet
+        product.setLastSyncedAt(null); // should be null Product not Synced yet
+        product.setSalesChannels(null); // ToDo needed from ims-product-detail
+        product. setIsPreorder(null);  // Fetch from Enrichment Data
         product.setIsSerialized(productDTO.getIsSerialized());
-//        product.setInventoryStatus(productDTO.getInventoryStatus());
-        product.setProductType(productDTO.getProductType());
-        product.setCountryCode(productDTO.getCountryCode() != null ? productDTO.getCountryCode()
-                : SystemConstant.COUNTRY_CODE_SA);
-        product.setAttributes(productDTO.getAdditionalAttribute() != null ? productDTO.getAdditionalAttribute()
-                : objectMapper.createArrayNode());
-        setAddlAttributes(product, productDTO);
-
+        product.setReturnAllowed(null); // Fetch from Enrichment Data
+        product.setFreeShippingEnabled(null); // Fetch from Enrichment Data
+        product.setInventoryCheck(Utils.convertToBoolean(productDTO.getInventoryStatus()));
+        product.setAllowNonStc(null); // Fetch from Enrichment Data
+        product.setPublishDate(null); // will be updated after Sync
+        product.setAvailableDate(null); // will be updated after Sync
+        product.setDiscontinuedDate(null); // ToDo needed from ims-product-detail
+        product.setPreorderDate(null);// ToDo needed from ims-product-detail
+        product.setRequest(null); // will be updated after Sync
 
         return product;
     }

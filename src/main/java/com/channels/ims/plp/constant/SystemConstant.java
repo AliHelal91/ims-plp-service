@@ -1,5 +1,7 @@
 package com.channels.ims.plp.constant;
 
+import java.util.Set;
+
 public class SystemConstant {
     public static final String SWAGGER_TITLE = "plm-integration-service";
     public static final String SWAGGER_DESCRIPTION = "Documentation Generated for plm-integration-services";
@@ -22,4 +24,5 @@ public class SystemConstant {
     public static final String MODEL_PAGE_NUMBER = "1";
     public static final String MODEL_PAGE_LIMIT = "1";
     public static final String IS_ATTRIBUTE_VALUE ="true" ;
+    public static final Set<String> IGNORE_FIELD = Set.of("id","createAt","updatedAt");
 }

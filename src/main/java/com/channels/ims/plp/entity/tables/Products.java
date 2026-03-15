@@ -8,6 +8,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,15 +36,13 @@ import java.util.UUID;
 @Table(name = "products", schema = "ims_plp_service_db")
 public class Products {
 
-
-    // 9511008839
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    @Column(name = "product_id",nullable = false,unique = true)
-    private  Integer productId;
+    @Column(name = "product_id", nullable = false, unique = true)
+    private Integer productId;  // Same Product id fetched from ims-product-service
 
     @Column(name = "item_code", nullable = false, unique = true)
     private String itemCode;
@@ -112,22 +112,22 @@ public class Products {
     @Column(name = "sales_channels", columnDefinition = "jsonb", nullable = false)
     private List<String> salesChannels;
 
-    @Column(name = "is_preorder", nullable = false,columnDefinition = "Boolean default False")
+    @Column(name = "is_preorder", nullable = false, columnDefinition = "Boolean default False")
     private Boolean isPreorder;
 
-    @Column(name = "is_serialized", nullable = false,columnDefinition = "Boolean default False")
+    @Column(name = "is_serialized", nullable = false, columnDefinition = "Boolean default False")
     private Boolean isSerialized;
 
-    @Column(name = "returnAllowed", nullable = false,columnDefinition = "Boolean default False")
-    private Boolean return_allowed;
+    @Column(name = "returnAllowed", nullable = false, columnDefinition = "Boolean default False")
+    private Boolean returnAllowed;
 
-    @Column(name = "free_shipping_enabled", nullable = false,columnDefinition = "Boolean default False")
+    @Column(name = "free_shipping_enabled", nullable = false, columnDefinition = "Boolean default False")
     private Boolean freeShippingEnabled;
 
-    @Column(name = "inventory_check", nullable = false,columnDefinition = "Boolean default True")
+    @Column(name = "inventory_check", nullable = false, columnDefinition = "Boolean default True")
     private Boolean inventoryCheck;
 
-    @Column(name = "allow_non_stc", nullable = false,columnDefinition = "Boolean default True")
+    @Column(name = "allow_non_stc", nullable = false, columnDefinition = "Boolean default True")
     private Boolean allowNonStc;
 
     @Column(name = "publish_date", nullable = false)
@@ -141,6 +141,10 @@ public class Products {
 
     @Column(name = "preorder_date", nullable = false)
     private LocalDateTime preorderDate;
+
+    @ManyToOne
+    @JoinColumn(name = "request_id", referencedColumnName = "id")
+    private Request request;
 
 
 }

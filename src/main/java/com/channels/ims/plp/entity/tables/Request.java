@@ -47,7 +47,7 @@ public class Request {
     private UUID imsProductId;  // Generate a random UUID
 
     @Column(name = "sync_batch_id",nullable = false)
-    private String syncBatchId;  // Used to group related sync operations
+    private UUID syncBatchId;  // Used to group related sync operations
 
     @Enumerated(EnumType.STRING)
     @Column(name = "request_type", nullable = false)

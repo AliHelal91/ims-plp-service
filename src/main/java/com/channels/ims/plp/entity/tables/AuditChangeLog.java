@@ -57,7 +57,7 @@ public class AuditChangeLog {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "changed_fields", columnDefinition = "jsonb")
-    private List<String> changedFields;
+    private String changedFields;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "before_state", columnDefinition = "jsonb",nullable = false)
@@ -73,9 +73,6 @@ public class AuditChangeLog {
     @ManyToOne
     @JoinColumn(name = "request_id",referencedColumnName = "id")
     private Request requestId;
-
-    @Column(name = "source_system", nullable = false)
-    private String sourceSystem;
 
     @Column(name = "triggered_by", nullable = false)
     private String triggeredBy;

@@ -38,7 +38,7 @@ CREATE TABLE ims_plp_service_db.lookup_value (
 );
 
 --------------------------------------------Request----------------------------------------------------
--- Create sequence for primary key
+-- Create sequence for ID
 CREATE SEQUENCE ims_plp_service_db.request_seq
     START WITH 1
     INCREMENT BY 1
@@ -48,27 +48,27 @@ CREATE SEQUENCE ims_plp_service_db.request_seq
 
 -- Create table
 CREATE TABLE ims_plp_service_db.request (
-    id BIGINT NOT NULL DEFAULT nextval('ims_plp_service_db.request_seq'),
+    id BIGINT PRIMARY KEY DEFAULT nextval('ims_plp_service_db.request_seq'),
     ims_product_id UUID NOT NULL UNIQUE,
-    sync_batch_id VARCHAR(255) NOT NULL,
-    request_type VARCHAR(50) NOT NULL,  -- Enum stored as string
+    sync_batch_id UUID NOT NULL,
+    request_type VARCHAR(50) NOT NULL,
     request_payload JSONB,
     response_payload JSONB,
     parent_history_id VARCHAR(255),
-    status VARCHAR(50) NOT NULL,         -- Enum stored as string
-    error_type VARCHAR(255),
-    error_code VARCHAR(255),
+    status VARCHAR(50) NOT NULL,
+    error_type VARCHAR(50),
+    error_code VARCHAR(100),
     error_message TEXT,
     retry_count INTEGER NOT NULL DEFAULT 0,
     max_retries INTEGER NOT NULL DEFAULT 3,
     next_retry_at TIMESTAMP,
+
     started_at TIMESTAMP NOT NULL,
     completed_at TIMESTAMP,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT pk_request PRIMARY KEY (id)
-);
 
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 CREATE INDEX idx_request_sync_batch
 ON ims_plp_service_db.request (sync_batch_id);
 
@@ -78,30 +78,26 @@ ON ims_plp_service_db.request (status);
 CREATE INDEX idx_request_type
 ON ims_plp_service_db.request (request_type);
 ---------------------------------------------audit_change_log---------------------------------------------------
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
--- Create table for audit_change_log
 CREATE TABLE ims_plp_service_db.audit_change_log (
-    id UUID NOT NULL DEFAULT gen_random_uuid(),
-    entity_type VARCHAR(50) NOT NULL,   -- Enum stored as string
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    entity_type VARCHAR(50) NOT NULL,
     entity_id UUID NOT NULL,
-    action VARCHAR(50) NOT NULL,        -- Enum stored as string
+    action VARCHAR(50) NOT NULL,
     change_reason VARCHAR(255) NOT NULL,
     changed_fields JSONB,
     before_state JSONB NOT NULL,
     after_status JSONB NOT NULL,
     sync_batch_id UUID NOT NULL,
-    request_id BIGINT,                  -- Many-to-one relation to Request.id
-    source_system VARCHAR(255) NOT NULL,
+    request_id BIGINT,
     triggered_by VARCHAR(255) NOT NULL,
-    error_type VARCHAR(50),             -- Enum stored as string
-    error_code VARCHAR(255),
+    error_type VARCHAR(50),
+    error_code VARCHAR(100),
     error_message TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT pk_audit_change_log PRIMARY KEY (id),
-    CONSTRAINT fk_audit_change_log_request FOREIGN KEY (request_id)
+
+    CONSTRAINT fk_audit_change_log_request
+        FOREIGN KEY (request_id)
         REFERENCES ims_plp_service_db.request(id)
-        ON DELETE SET NULL
 );
 
 CREATE INDEX idx_audit_entity_type
@@ -120,13 +116,15 @@ CREATE TABLE ims_plp_service_db.products (
     item_code VARCHAR(255) NOT NULL UNIQUE,
     name_en VARCHAR(255) NOT NULL,
     name_ar VARCHAR(255),
+    model_id INTEGER NOT NULL,
+    model_code VARCHAR(100) NOT NULL,
     description_en TEXT,
     description_ar TEXT,
-    product_category VARCHAR(255) NOT NULL,
-    product_sub_category VARCHAR(255),
+    product_category VARCHAR(100) NOT NULL,
+    product_sub_category VARCHAR(100),
     country_code VARCHAR(10),
     product_type VARCHAR(50),
-    manufacturer VARCHAR(255) NOT NULL,
+    manufacturer VARCHAR(100) NOT NULL,
     attributes JSONB,
     sync_status VARCHAR(50) NOT NULL,
     product_version INTEGER NOT NULL DEFAULT 1,
@@ -138,14 +136,19 @@ CREATE TABLE ims_plp_service_db.products (
     sales_channels JSONB NOT NULL,
     is_preorder BOOLEAN NOT NULL DEFAULT FALSE,
     is_serialized BOOLEAN NOT NULL DEFAULT FALSE,
-    return_allowed BOOLEAN NOT NULL DEFAULT FALSE,
+    returnAllowed BOOLEAN NOT NULL DEFAULT FALSE,
     free_shipping_enabled BOOLEAN NOT NULL DEFAULT FALSE,
     inventory_check BOOLEAN NOT NULL DEFAULT TRUE,
     allow_non_stc BOOLEAN NOT NULL DEFAULT TRUE,
     publish_date TIMESTAMP NOT NULL,
     available_date TIMESTAMP NOT NULL,
     discontinued_date TIMESTAMP NOT NULL,
-    preorder_date TIMESTAMP NOT NULL
+    preorder_date TIMESTAMP NOT NULL,
+    request_id BIGINT,
+
+    CONSTRAINT fk_products_request
+        FOREIGN KEY (request_id)
+        REFERENCES ims_plp_service_db.request(id)
 );
 
 CREATE INDEX idx_products_product_id ON ims_plp_service_db.products (product_id);

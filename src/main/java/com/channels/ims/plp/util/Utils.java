@@ -38,4 +38,19 @@ public class Utils {
             throw new ResourceException(ExceptionKey.NOT_VALID_NUMBER, HttpStatus.NOT_ACCEPTABLE, locale);
         }
     }
+
+    /**
+     * Utils Method to Parse String Value To Boolean Value
+     *
+     * @param value Value To Parse
+     * @return Boolean
+     */
+    public static Boolean convertToBoolean(String value) {
+        try {
+            return Boolean.parseBoolean(value);
+        } catch (Exception e) {
+            throw new ResourceException(ExceptionKey.NOT_VALID_BOOLEAN_VALUE, HttpStatus.NOT_ACCEPTABLE,
+                    Locale.getDefault());
+        }
+    }
 }
