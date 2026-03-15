@@ -1,7 +1,8 @@
 package com.channels.ims.plp.service;
 
 import com.channels.ims.plp.constant.SystemConstant;
-import com.channels.ims.plp.dto.model.ModelDetailsResponse;
+import com.channels.ims.plp.dto.model.ModelDetails;
+import com.channels.ims.plp.dto.model.ModelDetailsPageResponse;
 import com.channels.ims.plp.dto.model.ModelSpecificationResponseDTO;
 import com.channels.ims.plp.dto.prs.create.request.PhysicalResourceSpecification;
 import com.channels.ims.plp.dto.prs.create.request.ProdSpecCharValueUse;
@@ -23,11 +24,13 @@ import com.channels.ims.plp.mapper.PrsMapper;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +41,7 @@ public class PrsService {
     private final RequestService requestService;
     private final Gson gson;
     private final PrsMapper prsMapper;
+    private final SyncedModelsService syncedModelsService;
 
 
     /**
@@ -64,7 +68,17 @@ public class PrsService {
         List<PhysicalResourceSpecification> physicalResourceSpecification = new ArrayList<>();
 
         // Find Model Details from the ims-product-service
-        ModelDetailsResponse modelDetails = modelFeignClient.getModelDetails(prsPortalCreateRequest.getModelId());
+        ResponseEntity<ModelDetailsPageResponse> modelDetailsResponse = modelFeignClient
+                .getModelDetails(prsPortalCreateRequest.getModelId().toString(),
+                        SystemConstant.MODEL_PAGE_NUMBER,
+                        SystemConstant.MODEL_PAGE_LIMIT,
+                        SystemConstant.IS_ATTRIBUTE_VALUE);
+
+        ModelDetails modelDetails = Objects.requireNonNull(modelDetailsResponse.getBody()).getContent().getFirst();
+
+
+        // Create Synced Model with Initial Status
+        syncedModelsService.createSyncedModel(modelDetails.getId(), modelDetails.getCode(), request, locale);
 
         // prepare the list of ProdSpecCharValueUse
         List<ProdSpecCharValueUse> prodSpecCharValueUses = getProdSpecCharValueUse(prsPortalCreateRequest,
@@ -96,7 +110,7 @@ public class PrsService {
         request.setRequestPayload(gson.toJson(prsCreateRequest));
 
         // Sync With STC
-        request = syncWithSTC(prsCreateRequest, request);
+        request = syncWithSTC(prsCreateRequest, request, modelDetails.getCode(), locale);
 
         // Return Response
         return prsMapper.prsCreateResponse(request);
@@ -110,27 +124,43 @@ public class PrsService {
      * @param request          Request
      * @return Request
      */
-    private Request syncWithSTC(PrsCreateRequest prsCreateRequest, Request request) {
+    private Request syncWithSTC(PrsCreateRequest prsCreateRequest, Request request, String modelCode, Locale locale) {
 
         try {
+
             // Call the STC Sync
             PrsCreateResponse response = secureFeignClient.createPRS(prsCreateRequest);
 
             // Update Request Details after the Call
-            return requestService.updateAfterCompleteSync(request, gson.toJson(response));
+            request = requestService.updateAfterCompleteSync(request, gson.toJson(response));
+
+            // Update Synced Model Status
+            syncedModelsService.updateSyncedModelStatus(modelCode, request, locale);
+
+            return request;
         } catch (ResourceException e) {
+
             // Map the Error After Call
-            return requestService.updateAfterErrorAppear(request,
+            request = requestService.updateAfterErrorAppear(request,
                     e.getMessage(),
                     String.valueOf(e.getStatus().value()),
                     e.getErrorType());
+
+            // Update Synced Model Status
+            syncedModelsService.updateSyncedModelStatus(modelCode, request, locale);
+
+            return request;
         } catch (Exception e) {
 
-            // Map any Exception apper
-            return requestService.updateAfterErrorAppear(request,
+            request = requestService.updateAfterErrorAppear(request,
                     e.getMessage(),
                     String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                     ExceptionKey.INTERNAL_SERVER_ERROR);
+
+            // Update Synced Model Status
+            syncedModelsService.updateSyncedModelStatus(modelCode, request, locale);
+            // Map any Exception apper
+            return request;
         }
     }
 
@@ -140,7 +170,7 @@ public class PrsService {
      * @param modelDetails ModelDetailsResponse
      * @return TitleDetails List
      */
-    private List<TitleDetails> getTitleDetails(ModelDetailsResponse modelDetails) {
+    private List<TitleDetails> getTitleDetails(ModelDetails modelDetails) {
 
         List<TitleDetails> titleDetails = new ArrayList<>();
 
@@ -165,7 +195,7 @@ public class PrsService {
      * @return ProdSpecCharValueUse List
      */
     private List<ProdSpecCharValueUse> getProdSpecCharValueUse(PrsPortalCreateRequest model,
-                                                               ModelDetailsResponse modelDetails) {
+                                                               ModelDetails modelDetails) {
         List<ProdSpecCharValueUse> prodSpecCharValueUses = new ArrayList<>();
         for (ModelSpecificationResponseDTO modelSpecification : modelDetails.getModelSpecifications()) {
 

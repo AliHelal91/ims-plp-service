@@ -38,17 +38,26 @@ CREATE TABLE ims_plp_service_db.lookup_value (
 );
 
 --------------------------------------------Request----------------------------------------------------
--- Table
+-- Create sequence for primary key
+CREATE SEQUENCE ims_plp_service_db.request_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+-- Create table
 CREATE TABLE ims_plp_service_db.request (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id BIGINT NOT NULL DEFAULT nextval('ims_plp_service_db.request_seq'),
+    ims_product_id UUID NOT NULL UNIQUE,
     sync_batch_id VARCHAR(255) NOT NULL,
-    request_type VARCHAR(100) NOT NULL,
-    request_payload JSONB NOT NULL,
+    request_type VARCHAR(50) NOT NULL,  -- Enum stored as string
+    request_payload JSONB,
     response_payload JSONB,
-    parent_history_id VARCHAR(255) NOT NULL,
-    status VARCHAR(100) NOT NULL,
-    error_type VARCHAR(100),
-    error_code VARCHAR(100),
+    parent_history_id VARCHAR(255),
+    status VARCHAR(50) NOT NULL,         -- Enum stored as string
+    error_type VARCHAR(255),
+    error_code VARCHAR(255),
     error_message TEXT,
     retry_count INTEGER NOT NULL DEFAULT 0,
     max_retries INTEGER NOT NULL DEFAULT 3,
@@ -56,7 +65,8 @@ CREATE TABLE ims_plp_service_db.request (
     started_at TIMESTAMP NOT NULL,
     completed_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk_request PRIMARY KEY (id)
 );
 
 CREATE INDEX idx_request_sync_batch
@@ -70,25 +80,27 @@ ON ims_plp_service_db.request (request_type);
 ---------------------------------------------audit_change_log---------------------------------------------------
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+-- Create table for audit_change_log
 CREATE TABLE ims_plp_service_db.audit_change_log (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    entity_type VARCHAR(50) NOT NULL,
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
+    entity_type VARCHAR(50) NOT NULL,   -- Enum stored as string
     entity_id UUID NOT NULL,
-    action VARCHAR(50) NOT NULL,
+    action VARCHAR(50) NOT NULL,        -- Enum stored as string
     change_reason VARCHAR(255) NOT NULL,
     changed_fields JSONB,
     before_state JSONB NOT NULL,
     after_status JSONB NOT NULL,
     sync_batch_id UUID NOT NULL,
-    request_id UUID,
-    source_system VARCHAR(100) NOT NULL,
-    triggered_by VARCHAR(100) NOT NULL,
-    error_type VARCHAR(50),
-    error_code VARCHAR(50),
-    error_message VARCHAR(255),
+    request_id BIGINT,                  -- Many-to-one relation to Request.id
+    source_system VARCHAR(255) NOT NULL,
+    triggered_by VARCHAR(255) NOT NULL,
+    error_type VARCHAR(50),             -- Enum stored as string
+    error_code VARCHAR(255),
+    error_message TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_request FOREIGN KEY (request_id)
-        REFERENCES ims_plp_service_db.request (id)
+    CONSTRAINT pk_audit_change_log PRIMARY KEY (id),
+    CONSTRAINT fk_audit_change_log_request FOREIGN KEY (request_id)
+        REFERENCES ims_plp_service_db.request(id)
         ON DELETE SET NULL
 );
 
@@ -189,3 +201,28 @@ CREATE TABLE ims_plp_service_db.general_configuration (
 
 CREATE INDEX idx_general_configuration_status
 ON ims_plp_service_db.general_configuration(status);
+
+-----------------------------------------------synced_models-------------------------------------------------
+
+-- Create sequence for primary key
+CREATE SEQUENCE ims_plp_service_db.synced_models_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+-- Create table
+CREATE TABLE ims_plp_service_db.synced_models (
+    id BIGINT NOT NULL DEFAULT nextval('ims_plp_service_db.synced_models_seq'),
+    status VARCHAR(255) NOT NULL,
+    model_id INTEGER NOT NULL,
+    model_code VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    request_id BIGINT,
+    CONSTRAINT pk_synced_models PRIMARY KEY (id),
+    CONSTRAINT fk_synced_models_request FOREIGN KEY (request_id)
+        REFERENCES ims_plp_service_db.request(id)
+        ON DELETE SET NULL
+);

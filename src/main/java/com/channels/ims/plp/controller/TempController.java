@@ -1,10 +1,12 @@
 package com.channels.ims.plp.controller;
 
+import com.channels.ims.plp.dto.portal.sync.request.PortalSyncProductRequest;
 import com.channels.ims.plp.dto.prs.create.request.PrsCreateRequest;
 import com.channels.ims.plp.dto.temptable.create.GenerateTempTableRequest;
 import com.channels.ims.plp.dto.temptable.create.GenerateTempTableResponse;
 import com.channels.ims.plp.dto.temptable.fetch.single.SingleTempTableResponse;
 import com.channels.ims.plp.feign.SecureFeignClient;
+import com.channels.ims.plp.service.PortalService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TempController {
 
-    private final SecureFeignClient secureFeignClient;
+    private final PortalService portalService;
 
     @PostMapping
     public ResponseEntity<GenerateTempTableResponse> create(
-            @RequestBody @Valid GenerateTempTableRequest tempTableRequest,
+            @RequestBody @Valid PortalSyncProductRequest portalSyncProductRequest,
             final HttpServletRequest request) {
 
-        secureFeignClient.createPRS(PrsCreateRequest.builder().build());
+        portalService.stcSync(request,portalSyncProductRequest);
         // Return Response
         return new ResponseEntity<>(GenerateTempTableResponse.builder().build(), HttpStatus.CREATED);
     }

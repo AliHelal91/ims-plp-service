@@ -19,4 +19,7 @@ public class SystemConstant {
     public static final String EN_LANGUAGE_CODE = "en-xx";
     public static final String AR_LANGUAGE_CODE = "ar-xx";
     public static final String MANUAL_TESTING_VALUE = "true";
+    public static final String MODEL_PAGE_NUMBER = "1";
+    public static final String MODEL_PAGE_LIMIT = "1";
+    public static final String IS_ATTRIBUTE_VALUE ="true" ;
 }

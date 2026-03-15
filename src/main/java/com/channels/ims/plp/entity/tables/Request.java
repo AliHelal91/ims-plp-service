@@ -44,10 +44,10 @@ public class Request {
     private Long id;
 
     @Column(name = "ims_product_id",unique = true,nullable = false)
-    private UUID imsProductId;
+    private UUID imsProductId;  // Generate a random UUID
 
-    @Column(name = "sync_batch_id")
-    private String syncBatchId;
+    @Column(name = "sync_batch_id",nullable = false)
+    private String syncBatchId;  // Used to group related sync operations
 
     @Enumerated(EnumType.STRING)
     @Column(name = "request_type", nullable = false)
@@ -62,7 +62,7 @@ public class Request {
     private String responsePayload;
 
     @Column(name = "parent_history_id")
-    private String parentHistoryId;
+    private String parentHistoryId;  // PO records link to their parent PRS via (imsProductId)
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

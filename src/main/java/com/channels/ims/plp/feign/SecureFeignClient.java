@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface SecureFeignClient {
 
-    @PostMapping("/bulk/rso")
+    @PostMapping("/bulk/prs")
     PrsCreateResponse createPRS(@RequestBody PrsCreateRequest prsCreateRequest);
 
     @PostMapping("/bulk/po")

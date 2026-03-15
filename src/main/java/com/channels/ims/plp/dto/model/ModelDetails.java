@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
-public class ModelDetailsResponse {
+public class ModelDetails {
 
     private Integer id;
     private String nameEn;

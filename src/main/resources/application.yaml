@@ -62,4 +62,5 @@ product:
 
 stc:
   sync:
-    url: https://sandbox.api.stc.com.sa:9512/s-tmf/productCatalogManagement/consumer/v1
+#    url: https://sandbox.api.stc.com.sa:9512/s-tmf/productCatalogManagement/consumer/v1
+    url: localhost:8081/stc

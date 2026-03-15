@@ -52,6 +52,7 @@ public class RequestService {
         Request request = Request.builder()
                 .requestType(requestType)
                 .imsProductId(UUID.randomUUID())
+                .syncBatchId(UUID.randomUUID().toString())
                 .responsePayload(null) // it will be updated after the call
                 .status(SyncStatusEnums.INITIAL)
                 .errorType(null)  // it will be updated if error appear
