@@ -40,6 +40,11 @@ public class PoService {
     private final SecureFeignClient secureFeignClient;
     private final Gson gson;
 
+    /**
+     * Create Product Offering Request
+     * @param productDetails  ProductDetails
+     * @param locale Locale
+     */
     public void createPORequest(ProductDetails productDetails,
                                 Locale locale) {
 
@@ -86,8 +91,8 @@ public class PoService {
                         .build())
                 .shippable(productDetails.getShippable())
                 .productSpecification(ProductSpecificationDTO.builder()
-                        .id(products.getProductId().toString())
-                        .name(products.getNameEN())
+                        .id(products.getId().toString())
+                        .name(products.getProductType())
                         .build())
                 .prodSpecCharValueUse(getProdSpecCharValueUse(products))
                 .configuration(getProductConfiguration(products))
