@@ -28,6 +28,11 @@ public class ProductsService {
     private final ProductDetailsMapper productDetailsMapper;
     private final AuditChangeLogService auditChangeLogService;
 
+    /**
+     * Save or Update Product fetched From ims-product-service
+     *
+     * @param payload Product Details
+     */
     public void saveProductMasterDetails(String payload) {
 
         // convert Payload to Product DTO
@@ -38,9 +43,6 @@ public class ProductsService {
 
         // Map to Product Entity in case not exists create new one
         Products updatedProduct = productDetailsMapper.mapToProducts(originalProduct, productDTO);
-
-        // update Sync Details
-        updatedProduct = updateSyncDetails(updatedProduct);
 
         // save to Product Table
         updatedProduct = productsRepository.save(updatedProduct);
@@ -57,14 +59,6 @@ public class ProductsService {
 
     }
 
-    private Products updateSyncDetails(Products product) {
-
-        product.setProductVersion(1);
-        product.setSyncedVersion(0);
-        product.setSyncStatus(SyncStatusEnums.PENDING);
-        return product;
-    }
-
     /**
      * Find Product By Product ID
      *
@@ -74,6 +68,7 @@ public class ProductsService {
      */
     public Products findByProductId(Integer productId, Locale locale) {
 
+        // Fetch Product from
         return productsRepository.findByProductId(productId).orElseThrow(() ->
                 new ResourceException(ExceptionKey.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND, locale));
 

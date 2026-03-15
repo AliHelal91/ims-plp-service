@@ -31,32 +31,6 @@ public class GeneralFeignConfig implements ErrorDecoder, RequestInterceptor {
     @Override
     public Exception decode(String methodKey, Response response) {
 
-//        try {
-//
-//            String body = null;
-//
-//            if (response.body() != null) {
-//                body = new String(response.body().asInputStream().readAllBytes(), StandardCharsets.UTF_8);
-//            }
-//
-//            STCErrorResponse errorResponse =
-//                    gson.fromJson(body, STCErrorResponse.class);
-//
-//            return new ResourceException(
-//                    errorResponse.getError().getCode(),
-//                    HttpStatus.valueOf(Integer.parseInt(errorResponse.getHttpStatusCode())),
-//                    Locale.getDefault()
-//            );
-//
-//        } catch (Exception e) {
-//
-//            return new ResourceException(
-//                    ExceptionKey.ERROR_STC_INTEGRATION,
-//                    HttpStatus.INTERNAL_SERVER_ERROR,
-//                    Locale.getDefault()
-//            );
-//        }
-
         return new ResourceException(
                     response.reason(),
                     HttpStatus.INTERNAL_SERVER_ERROR,

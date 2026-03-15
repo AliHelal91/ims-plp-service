@@ -7,10 +7,14 @@ import com.channels.ims.plp.dto.prs.portal.PrsPortalCreateRequest;
 import com.channels.ims.plp.dto.prs.portal.PrsPortalCreateResponse;
 import com.channels.ims.plp.entity.tables.Products;
 import com.channels.ims.plp.enums.SyncStatusEnums;
+import com.channels.ims.plp.exception.ExceptionKey;
+import com.channels.ims.plp.exception.ResourceException;
 import com.channels.ims.plp.util.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.Locale;
 
 @Service
@@ -91,10 +95,20 @@ public class PortalService {
                 .build();
     }
 
+    /**
+     * Check if Product eligible to Sync with Stc
+     *
+     * @param product       Product
+     * @param productDetail Product Details
+     * @param locale        Locale
+     */
     private void validateProduct(Products product,
                                  ProductDetails productDetail,
                                  Locale locale) {
 
-        // ToDo add the Validation
+        // Check Sync Status
+        if (product.getSyncStatus().name().equals(SyncStatusEnums.SYNCED.name())) {
+            throw new ResourceException(ExceptionKey.PRODUCT_SYNCED, HttpStatus.FOUND, locale);
+        }
     }
 }

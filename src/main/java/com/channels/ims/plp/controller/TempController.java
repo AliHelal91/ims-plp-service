@@ -27,6 +27,8 @@ public class TempController {
 
     private final PortalService portalService;
 
+
+    // This API For Testing only
     @PostMapping
     public ResponseEntity<GenerateTempTableResponse> create(
             @RequestBody @Valid PortalSyncProductRequest portalSyncProductRequest,

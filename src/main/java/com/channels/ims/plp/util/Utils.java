@@ -23,7 +23,6 @@ public class Utils {
         return Locale.ENGLISH;
     }
 
-
     /**
      * Utils Method to Parse String Value To Integer Value
      *

@@ -22,6 +22,8 @@ public class ProductDetailsMapper {
 
         if (product == null) {
             product = new Products();
+            product.setProductVersion(0);
+            product.setSyncedVersion(0);
         }
         product.setProductId(productDTO.getProductId());
         product.setItemCode(productDTO.getItemCode());
@@ -38,19 +40,13 @@ public class ProductDetailsMapper {
         product.setManufacturer(productDTO.getManufacturer());
         product.setAttributes(productDTO.getAttribute());
         product.setSyncStatus(SyncStatusEnums.PENDING);
-        product.setProductVersion(0); // As Initial Value start from 0
-        product.setSyncedVersion(0); // As Initial Value start from 0
-        product.setLastSyncedAt(null); // should be null Product not Synced yet
-        product.setLastSyncedAt(null); // should be null Product not Synced yet
+        product.setProductVersion(product.getProductVersion()+1); // As Initial Value start from 0
         product.setSalesChannels(null); // ToDo needed from ims-product-detail
         product. setIsPreorder(null);  // Fetch from Enrichment Data
         product.setIsSerialized(productDTO.getIsSerialized());
         product.setReturnAllowed(null); // Fetch from Enrichment Data
         product.setFreeShippingEnabled(null); // Fetch from Enrichment Data
         product.setInventoryCheck(Utils.convertToBoolean(productDTO.getInventoryStatus()));
-        product.setAllowNonStc(null); // Fetch from Enrichment Data
-        product.setPublishDate(null); // will be updated after Sync
-        product.setAvailableDate(null); // will be updated after Sync
         product.setDiscontinuedDate(null); // ToDo needed from ims-product-detail
         product.setPreorderDate(null);// ToDo needed from ims-product-detail
         product.setRequest(null); // will be updated after Sync

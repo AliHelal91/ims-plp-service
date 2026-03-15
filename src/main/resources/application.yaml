@@ -27,6 +27,7 @@ kafka:
   bootstrap-servers: localhost:9092
   topic:
     product-updates: product-topic
+    product-updates-ddl: product-topic-ddl
 
 #logging
 logging:

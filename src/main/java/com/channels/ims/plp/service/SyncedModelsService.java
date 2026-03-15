@@ -6,12 +6,7 @@ import com.channels.ims.plp.enums.SyncStatusEnums;
 import com.channels.ims.plp.exception.ExceptionKey;
 import com.channels.ims.plp.exception.ResourceException;
 import com.channels.ims.plp.repository.SyncedModelsRepository;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
